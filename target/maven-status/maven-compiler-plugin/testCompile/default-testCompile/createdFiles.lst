@@ -1,0 +1,11 @@
+com\aaa\HospitalApplicationTests.class
+com\aaa\controller\BaseControllerTests.class
+com\aaa\controller\BasetimeControllerTests.class
+com\aaa\controller\DepartmentControllerTests.class
+com\aaa\controller\AreaControllerTests.class
+com\aaa\controller\CCashierControllerTests.class
+com\aaa\controller\CTakeConterTests.class
+com\aaa\controller\CreportControllerTests.class
+com\aaa\controller\CheckupControllerTests.class
+com\aaa\controller\COutControllerTests.class
+com\aaa\controller\DoctorControllerTests.class
