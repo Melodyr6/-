@@ -1,34 +1,89 @@
 services:
-  mysql:
+  mysql-drugstore:
+    image: mysql:8.3.0
+    container_name: mysql-container2
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD : "true"
+      MYSQL_DATABASE: drugstore
+    ports:
+      - "3308:3306"
+    networks:
+      - hospital_mynetwork
+    volumes:
+      - mysql_data_drugstore:/var/lib/mysql
+
+  app-drugstore:
+    image: tana88/drugstore:tag
+    container_name: drugstore
+    depends_on:
+      - mysql-drugstore
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container2:3306/drugstore?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      
+    networks:
+      - hospital_mynetwork
+
+  mysql-message:
+    image: mysql:8.3.0
+    container_name: mysql-container3
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD : "true"
+      MYSQL_DATABASE: message
+    ports:
+      - "3309:3306"
+    networks:
+      - hospital_mynetwork
+    volumes:
+      - mysql_data_message:/var/lib/mysql
+
+  app-message:
+    image: tana88/message:tag
+    container_name: message
+    depends_on:
+      - mysql-message
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container3:3306/message?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+    networks:
+      - hospital_mynetwork
+
+  mysql-hospital:
     image: mysql:8.3.0
     container_name: mysql-container1
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD : "true"
       MYSQL_DATABASE: hospital
     ports:
-      - "3307:3306"
+      - "3310:3306"
     networks:
-      - mynetwork
+      - hospital_mynetwork
     volumes:
-      - mysql_data:/var/lib/mysql
+      - mysql_data_hospital:/var/lib/mysql
 
-  app:
-    image: hospital:latest
-    container_name: hospital-container
+  app-hospital:
+    image: tana88/hospitalyes:tag
+    container_name: hospitalyes
     depends_on:
-      - mysql
+      - mysql-hospital
     ports:
       - "8082:8082"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container1:3306/hospital?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
     networks:
-      - mynetwork
+      - hospital_mynetwork
 
 networks:
-  mynetwork:
+  hospital_mynetwork:
     name: hospital_mynetwork
     driver: bridge
 
 volumes:
-  mysql_data:
+  mysql_data_drugstore:
+  mysql_data_message:
+  mysql_data_hospital:
