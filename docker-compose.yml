@@ -3,7 +3,6 @@ services:
     image: mysql:8.3.0
     container_name: mysql-container1
     environment:
-      MYSQL_ROOT_PASSWORD: Yy040419
       MYSQL_DATABASE: hospital
     ports:
       - "3307:3306"
@@ -13,7 +12,7 @@ services:
       - mysql_data:/var/lib/mysql
 
   app:
-    image: tititcaca/repository1:tag
+    image: hospital:latest
     container_name: myapp
     depends_on:
       - mysql
@@ -22,7 +21,6 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container1:3306/hospital?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: Yy040419
     networks:
       - mynetwork
 
