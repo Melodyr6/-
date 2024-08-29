@@ -3,6 +3,7 @@ services:
     image: mysql:8.3.0
     container_name: mysql-container1
     environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD : "true"
       MYSQL_DATABASE: hospital
     ports:
       - "3307:3306"
