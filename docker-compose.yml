@@ -13,7 +13,7 @@ services:
 
   app:
     image: hospital:latest
-    container_name: myapp
+    container_name: hospital-container
     depends_on:
       - mysql
     ports:
