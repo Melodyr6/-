@@ -43,7 +43,7 @@ public class CCashierController {
     private RestTemplate restTemplate = new RestTemplate();
 
     public List<CWarehuose> fetchWarehouses() {
-        String url = "http://localhost:8083/caocc/selware";
+        String url = "http://drugstore:8083/caocc/selware";
         System.out.println("进入fetchWarehouses内部");
         // 创建 HTTP 实体
         HttpEntity<?> requestEntity = new HttpEntity<>(null);
@@ -62,7 +62,7 @@ public class CCashierController {
 
     public List<CPharmacy> fetchPharm(CPharmacy cPharmacy) {
         System.out.println("进入fetchPharm内部");
-        String url = "http://localhost:8083/caocc/selpharm";
+        String url = "http://drugstore:8083/caocc/selpharm";
         // 创建 HTTP 实体
         HttpEntity<?> requestEntity = new HttpEntity<>(cPharmacy);
 
@@ -81,7 +81,7 @@ public class CCashierController {
     public Integer fetchdel(CPharmacy cPharmacy)
     {
         System.out.println("进入fetchdel内部");
-        String url = "http://localhost:8083/caocc/deldrunum";
+        String url = "http://drugstore:8083/caocc/deldrunum";
         // 创建 HTTP 实体
         HttpEntity<?> requestEntity = new HttpEntity<>(cPharmacy);
 
@@ -100,7 +100,7 @@ public class CCashierController {
     public Integer fetchadd(CPharmacy cPharmacy)
     {
         System.out.println("进入fetchadd内部");
-        String url = "http://localhost:8083/caocc/adddrunum";
+        String url = "http://drugstore:8083/caocc/adddrunum";
         // 创建 HTTP 实体
         HttpEntity<?> requestEntity = new HttpEntity<>(cPharmacy);
 

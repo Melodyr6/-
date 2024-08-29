@@ -6,11 +6,12 @@ import com.aaa.mapper.MessageMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestOperations;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -22,6 +23,12 @@ import java.util.Map;
 @RequestMapping("history")
 public class MessageController {
 
+    private final RestTemplate restTemplate; // 用于调用其他微服务
+
+    public MessageController(RestTemplateBuilder restTemplateBuilder) {
+        this.restTemplate = restTemplateBuilder.build();
+    }
+
     @RequestMapping("prescription")
     public Object prescriptionList() {
         return "history/prescription";
@@ -31,12 +38,18 @@ public class MessageController {
     public Object message() {
         return "history/message";
     }
-//
-//    @RequestMapping("listMessagePage")
-//    @ResponseBody
-//    public Object listMessagePage(HttpServletRequest request, MessageVo messageVo, Integer page, Integer limit) {
-//        User user = (User) request.getSession().getAttribute("user");
-//        PageHelper.startPage(page, limit);
+
+    @RequestMapping("listMessagePage")
+    @ResponseBody
+    public Object listMessagePage(HttpServletRequest request, MessageVo messageVo, Integer page, Integer limit) {
+        User user = (User) request.getSession().getAttribute("user");
+        PageHelper.startPage(page, limit);
+        String messageServiceUrl = "http://message:8084/history/listMessagePage?receiverId=" + user.getUserid()+ "&page=" + page + "&limit=" + limit;
+
+
+        // 发送请求到 message 服务
+        ResponseEntity<Map> response = restTemplate.getForEntity(messageServiceUrl, Map.class);
+
 //        messageVo.setReceiverId(user.getUserid());
 //        List<Message> messageList = messageMapper.listMessage(messageVo);
 //        messageList.forEach(message -> {
@@ -52,14 +65,17 @@ public class MessageController {
 //        //将分页后的数据返回（每页要显示的数据）
 //        tableData.put("data", pageInfo.getList());
 //        return tableData;
-//    }
-//
-//    @RequestMapping("updateIsRead")
-//    @ResponseBody
-//    public Object updateIsRead(MessageVo messageVo) {
+        return response.getBody();
+    }
+
+    @RequestMapping("updateIsRead")
+    @ResponseBody
+    public Object updateIsRead(MessageVo messageVo) {
+        String messageServiceUrl = "http://message:8084/history/updateIsRead";
+        ResponseEntity<Integer> response = restTemplate.getForEntity(messageServiceUrl, Integer.class);
 //        int resultStatus = messageMapper.updateIsRead(messageVo.getMessageId());
-//        return resultStatus;
-//    }
+        return response.getBody();
+    }
 
     @PostMapping("getUserid")
     public Integer getUserid(@RequestBody User user){

@@ -122,7 +122,7 @@
         //渲染数据表格
         tableIns = table.render({
             elem: '#message'   //渲染的目标对象
-            , url: 'http://localhost:8084/history/listMessagePage' //数据接口
+            , url: '../history/listMessagePage' //数据接口
             , title: '预约挂号信息表'//数据导出来的标题
             , toolbar: "#ToolBar"   //表格的工具条
             , height: 'full-200'
@@ -144,13 +144,13 @@
         $("#doSearch").click(function () {
             var params = $("#searchFrm").serialize();
             tableIns.reload({
-                url: "http://localhost:8084/history/listMessagePage?" + params
+                url: "../history/listMessagePage?" + params
             })
         });
         // 重置
         $("#reset").click(function () {
             tableIns.reload({
-                url: "http://localhost:8084/history/listMessagePage"
+                url: "../history/listMessagePage"
             })
         });
 
